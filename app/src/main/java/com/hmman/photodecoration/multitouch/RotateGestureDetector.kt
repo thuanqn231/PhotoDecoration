@@ -6,9 +6,10 @@ import android.view.MotionEvent
 class RotateGestureDetector(
     context: Context?,
     private val mListener: OnRotateGestureListener
-) :
-    TwoFingerGestureDetector(context!!) {
+): TwoFingerGestureDetector(context!!) {
+
     private var mSloppyGesture = false
+
     override fun handleStartProgressEvent(actionCode: Int, event: MotionEvent?) {
         when (actionCode) {
             MotionEvent.ACTION_POINTER_DOWN -> {

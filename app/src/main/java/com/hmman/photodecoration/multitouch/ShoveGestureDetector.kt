@@ -6,8 +6,8 @@ import android.view.MotionEvent
 class ShoveGestureDetector(
     context: Context?,
     private val mListener: OnShoveGestureListener
-) :
-    TwoFingerGestureDetector(context!!) {
+) : TwoFingerGestureDetector(context!!) {
+
     private var mPrevAverageY = 0f
     private var mCurrAverageY = 0f
     private var mSloppyGesture = false

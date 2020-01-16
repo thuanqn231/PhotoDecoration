@@ -33,15 +33,12 @@ abstract class BaseGestureDetector(protected val mContext: Context) {
 
     open fun updateStateByEvent(curr: MotionEvent) {
         val prev = mPrevEvent
-        // Reset mCurrEvent
         if (mCurrEvent != null) {
             mCurrEvent!!.recycle()
             mCurrEvent = null
         }
         mCurrEvent = MotionEvent.obtain(curr)
-        // Delta time
         mTimeDelta = curr.eventTime - prev!!.eventTime
-        // Pressure
         mCurrPressure = curr.getPressure(curr.actionIndex)
         mPrevPressure = prev.getPressure(prev.actionIndex)
     }

@@ -4,7 +4,10 @@ import android.content.Context
 import android.graphics.PointF
 import android.view.MotionEvent
 
-class MoveGestureDetector (context: Context, listener: OnMoveGestureListener) : BaseGestureDetector(context){
+class MoveGestureDetector (
+    context: Context,
+    listener: OnMoveGestureListener
+) : BaseGestureDetector(context){
 
     private val mListener: OnMoveGestureListener
     private var mCurrFocusInternal: PointF? = null

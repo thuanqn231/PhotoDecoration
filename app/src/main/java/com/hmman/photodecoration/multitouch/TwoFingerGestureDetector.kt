@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 
-abstract class TwoFingerGestureDetector(context: Context?) :
-    BaseGestureDetector(context!!) {
+abstract class TwoFingerGestureDetector(
+    context: Context?
+) : BaseGestureDetector(context!!) {
+
     private val mEdgeSlop: Float
     protected var mPrevFingerDiffX = 0f
     protected var mPrevFingerDiffY = 0f
@@ -15,12 +17,11 @@ abstract class TwoFingerGestureDetector(context: Context?) :
     private var mBottomSlopEdge = 0f
     private var mCurrLen = 0f
     private var mPrevLen = 0f
-    abstract override fun handleStartProgressEvent(
-        actionCode: Int,
-        event: MotionEvent?
-    )
+
+    abstract override fun handleStartProgressEvent(actionCode: Int, event: MotionEvent?)
 
     abstract override fun handleInProgressEvent(actionCode: Int, event: MotionEvent?)
+
     override fun updateStateByEvent(curr: MotionEvent) {
         super.updateStateByEvent(curr)
         val prev = mPrevEvent!!
