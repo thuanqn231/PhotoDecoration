@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:background="#00FFCC"
     android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +11,9 @@
     <com.hmman.photodecoration.widget.MotionView
         android:id="@+id/motionView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+    </com.hmman.photodecoration.widget.MotionView>
 
     <androidx.appcompat.widget.AppCompatButton
         android:text="Reset"
@@ -53,6 +54,12 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/btnUndo"
         android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:id="@+id/btnAddText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add fucking text" />
 
     <androidx.appcompat.widget.AppCompatImageView
         app:srcCompat="@drawable/mankey"

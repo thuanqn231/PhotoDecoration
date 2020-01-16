@@ -4,7 +4,8 @@ import android.content.Context
 import android.graphics.PointF
 import android.view.MotionEvent
 
-class MoveGestureDetector (context: Context, listener: OnMoveGestureListener) : BaseGestureDetector(context){
+class MoveGestureDetector(context: Context, listener: OnMoveGestureListener) :
+    BaseGestureDetector(context) {
 
     private val mListener: OnMoveGestureListener
     private var mCurrFocusInternal: PointF? = null
@@ -17,7 +18,7 @@ class MoveGestureDetector (context: Context, listener: OnMoveGestureListener) : 
     }
 
     override fun handleStartProgressEvent(actionCode: Int, event: MotionEvent?) {
-        when (actionCode){
+        when (actionCode) {
             MotionEvent.ACTION_DOWN -> {
                 resetState()
 
@@ -26,22 +27,25 @@ class MoveGestureDetector (context: Context, listener: OnMoveGestureListener) : 
 
                 updateStateByEvent(event!!)
             }
-            MotionEvent.ACTION_MOVE -> mGestureInProgress = mListener!!.onMoveBegin(this)
+            MotionEvent.ACTION_MOVE ->
+                mGestureInProgress = mListener!!.onMoveBegin(this)
+
         }
     }
 
     override fun handleInProgressEvent(actionCode: Int, event: MotionEvent?) {
-        when (actionCode){
-            MotionEvent.ACTION_UP -> {}
+        when (actionCode) {
+            MotionEvent.ACTION_UP -> {
+            }
             MotionEvent.ACTION_CANCEL -> {
                 mListener!!.onMoveEnd(this)
                 resetState()
             }
             MotionEvent.ACTION_MOVE -> {
                 updateStateByEvent(event!!)
-                if (mCurrPressure / mPrevPressure > PRESSURE_THRESHOLD){
+                if (mCurrPressure / mPrevPressure > PRESSURE_THRESHOLD) {
                     val updatePrevious = mListener!!.onMove(this)
-                    if (updatePrevious){
+                    if (updatePrevious) {
                         mPrevEvent!!.recycle()
                         mPrevEvent = MotionEvent.obtain(event)
                     }
@@ -50,28 +54,28 @@ class MoveGestureDetector (context: Context, listener: OnMoveGestureListener) : 
         }
     }
 
-    private fun determineFocalPoint (event: MotionEvent): PointF{
+    private fun determineFocalPoint(event: MotionEvent): PointF {
         val pCount = event.pointerCount
         var x = 0f
         var y = 0f
 
-        for (i in 0 until pCount){
-            x+= event.getX(i)
-            y+= event.getY(i)
+        for (i in 0 until pCount) {
+            x += event.getX(i)
+            y += event.getY(i)
         }
 
-        return PointF(x/pCount, y/pCount)
+        return PointF(x / pCount, y / pCount)
     }
 
-    fun getFocusX (): Float {
+    fun getFocusX(): Float {
         return mFocusExternal.x
     }
 
-    fun getFocusY (): Float {
+    fun getFocusY(): Float {
         return mFocusExternal.y
     }
 
-    fun getFocusDelta (): PointF {
+    fun getFocusDelta(): PointF {
         return mFocusDeltaExternal
     }
 
@@ -95,7 +99,8 @@ class MoveGestureDetector (context: Context, listener: OnMoveGestureListener) : 
                 FOCUS_DELTA_ZERO
             else PointF(
                 mCurrFocusInternal!!.x - mPrevFocusInternal!!.x,
-                mCurrFocusInternal!!.y - mPrevFocusInternal!!.y)
+                mCurrFocusInternal!!.y - mPrevFocusInternal!!.y
+            )
 
 
     }

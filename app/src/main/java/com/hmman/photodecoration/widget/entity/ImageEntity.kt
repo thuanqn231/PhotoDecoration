@@ -33,7 +33,7 @@ class ImageEntity (@NonNull layer: Layer,
         srcPoints[8] = 0f
     }
 
-    override fun drawContent(canvas: Canvas?, drawingPaint: Paint?) {
+    override fun drawContent(canvas: Canvas, drawingPaint: Paint?) {
         canvas!!.drawBitmap(bitmap, matrix, drawingPaint)
     }
 

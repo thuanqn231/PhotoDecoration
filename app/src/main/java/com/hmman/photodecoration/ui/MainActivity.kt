@@ -3,7 +3,6 @@ package com.hmman.photodecoration.ui
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
-import android.transition.Visibility
 import android.view.View
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
@@ -29,44 +28,53 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         fontProvider = FontProvider(resources)
-        val textLayer = createTextLayer()!!
-        val textEntity = TextEntity(textLayer, motionView.width, motionView.height, fontProvider)
-        motionView.addEntityAndPosition(textEntity)
 
-        val center: PointF = textEntity.absoluteCenter()
-        center.y = center.y * 0.5f
-        textEntity.moveCenterTo(center)
 
-        motionView.invalidate()
-
-        startTextEntityEditing()
-
-        btnAdd.setOnClickListener({
+        btnAdd.setOnClickListener {
             addSticker(R.drawable.mankey)
-        })
+        }
 
-        btnUndo.setOnClickListener({
+        btnUndo.setOnClickListener {
             motionView.undo()
-        })
+        }
 
-        btnRedo.setOnClickListener({
+        btnRedo.setOnClickListener {
             motionView.redo()
-        })
+        }
 
-        btnReset.setOnClickListener({
+        btnReset.setOnClickListener {
             motionView.reset()
-        })
+        }
 
-        btnSave.setOnClickListener({
+        btnSave.setOnClickListener {
             val bitmap =
-                Bitmap.createBitmap(motionView.getWidth(), motionView.getHeight(), Bitmap.Config.ARGB_8888)
+                Bitmap.createBitmap(
+                    motionView.getWidth(),
+                    motionView.getHeight(),
+                    Bitmap.Config.ARGB_8888
+                )
             val canvas = Canvas(bitmap)
             motionView.draw(canvas)
 
             imgResult.setBackgroundColor(Color.RED)
             imgResult.setImageBitmap(bitmap)
             imgResult.visibility = View.VISIBLE
-        })
+        }
+
+        btnAddText.setOnClickListener {
+            val textLayer = createTextLayer()!!
+            val textEntity =
+                TextEntity(textLayer, motionView.width, motionView.height, fontProvider)
+            motionView.addEntityAndPosition(textEntity)
+
+            val center: PointF = textEntity.absoluteCenter()
+            center.y = center.y * 0.5f
+            textEntity.moveCenterTo(center)
+
+            motionView.invalidate()
+
+            startTextEntityEditing()
+        }
 
     }
 
@@ -100,12 +108,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun createTextLayer(): TextLayer? {
         val textLayer = TextLayer()
-        val font = Font()
-        font.color = TextLayer.Limits.INITIAL_FONT_COLOR
+//        val font = Font()
+//        font.color = TextLayer.Limits.INITIAL_FONT_COLOR
 //        font.size = TextLayer.Limits.INITIAL_FONT_SIZE
-        font.size = 20F
-        font.typeface = fontProvider.getDefaultFontName()
-        textLayer.font = font
+//        font.size = 20F
+//        font.typeface = fontProvider.getDefaultFontName()
+//        textLayer.font = font
         textLayer.text = "Hello, world :))"
         if (BuildConfig.DEBUG) {
             textLayer.text = "Hello, world :))"

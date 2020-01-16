@@ -16,17 +16,18 @@ import com.hmman.photodecoration.model.TextLayer
 import com.hmman.photodecoration.util.FontProvider
 
 @RequiresApi(Build.VERSION_CODES.M)
-class TextEntity (@NonNull textLayer: TextLayer,
-                  @IntRange (from = 1) canvasWidth: Int,
-                  @IntRange (from = 1) canvasHeight: Int,
-                  @NonNull val fontProvider: FontProvider)
-    : MotionEntity (textLayer, canvasWidth, canvasHeight){
+class TextEntity(
+    @NonNull textLayer: TextLayer,
+    @IntRange(from = 1) canvasWidth: Int,
+    @IntRange(from = 1) canvasHeight: Int,
+    @NonNull val fontProvider: FontProvider
+) : MotionEntity(textLayer, canvasWidth, canvasHeight) {
 
-    private val textPaint: TextPaint
+    private val textPaint: TextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+
     private var bitmap: Bitmap? = null
 
     init {
-        textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         updateEntity(false)
     }
 
@@ -35,7 +36,7 @@ class TextEntity (@NonNull textLayer: TextLayer,
         val oldCenter = absoluteCenter()
         val newBmp: Bitmap = createBitmap(layer as TextLayer, bitmap)!!
         // recycle previous bitmap (if not reused) as soon as possible
-        if (bitmap != null && bitmap != newBmp && !bitmap!!.isRecycled()) {
+        if (bitmap != null && bitmap != newBmp && !bitmap!!.isRecycled) {
             bitmap!!.recycle()
         }
         this.bitmap = newBmp
@@ -54,7 +55,7 @@ class TextEntity (@NonNull textLayer: TextLayer,
         srcPoints[6] = 0f
         srcPoints[7] = height
         srcPoints[8] = 0f
-        srcPoints[8] = 0f
+        srcPoints[9] = 0f
         if (moveToPreviousCenter) { // move to previous center
             moveCenterTo(oldCenter)
         }
@@ -66,21 +67,40 @@ class TextEntity (@NonNull textLayer: TextLayer,
         val boundsWidth = canvasWidth
 
         textPaint.style = Paint.Style.FILL
-        textPaint.textSize = textLayer.font!!.size * canvasWidth
-        textPaint.color = textLayer.font!!.color
-        textPaint.typeface = fontProvider.getTypeface(textLayer.font!!.typeface!!)
+        textPaint.textSize = 30F
+        textPaint.color = Color.RED
+//        textPaint.typeface = fontProvider.getTypeface(textLayer.font!!.typeface!!)
 
-        val sl = StaticLayout.Builder.obtain(textLayer.text!!, 0, textLayer.text!!.length, textPaint, width)
+        val sl = StaticLayout.Builder.obtain(
+            textLayer.text!!,
+            0,
+            textLayer.text!!.length,
+            textPaint,
+            width
+        )
             .setAlignment(Layout.Alignment.ALIGN_CENTER)
             .setLineSpacing(1f, 1f)
             .setIncludePad(true)
             .build()
 
+        @Suppress("DEPRECATION")
+        val s2 = StaticLayout(
+            "Hello buddy",
+            textPaint,
+            boundsWidth,
+            Layout.Alignment.ALIGN_CENTER,
+            1f,
+            1f,
+            true
+        )
+
 //        val sl = StaticLayout(textLayer.text, textPaint, boundsWidth, Layout.Alignment.ALIGN_CENTER,
 //            1f, 1f, true)
-        val boundsHeight = sl.height
-        val bmpHeight = (canvasHeight * Math.max(TextLayer.Limits.MIN_BITMAP_HEIGHT,
-            1.0f * boundsHeight / canvasHeight)).toInt()
+        val boundsHeight = s2.height
+        val bmpHeight = (canvasHeight * Math.max(
+            TextLayer.Limits.MIN_BITMAP_HEIGHT,
+            1.0f * boundsHeight / canvasHeight
+        )).toInt()
         val bmp: Bitmap
         if (reuseBmp != null && reuseBmp.width == boundsWidth && reuseBmp.height == bmpHeight) {
             bmp = reuseBmp
@@ -96,19 +116,20 @@ class TextEntity (@NonNull textLayer: TextLayer,
             canvas.translate(0f, textYCoordinate)
         }
 
-        sl.draw(canvas)
+        s2.draw(canvas)
         canvas.restore()
         return bmp
     }
 
-    override fun drawContent(canvas: Canvas?, drawingPaint: Paint?) {
-        if (bitmap != null){
+    override fun drawContent(canvas: Canvas, drawingPaint: Paint?) {
+        if (bitmap != null) {
+            println("da vo day")
             canvas!!.drawBitmap(bitmap!!, matrix, drawingPaint)
         }
     }
 
     override fun release() {
-        if (bitmap != null && !bitmap!!.isRecycled){
+        if (bitmap != null && !bitmap!!.isRecycled) {
             bitmap!!.recycle()
         }
     }

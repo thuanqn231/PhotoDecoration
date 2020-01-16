@@ -52,6 +52,7 @@ class MotionView : FrameLayout {
     private var rotateGestureDetector: RotateGestureDetector? = null
     private var moveGestureDetector: MoveGestureDetector? = null
     private var gestureDetectorCompat: GestureDetectorCompat? = null
+    private var motionEventTouch: MotionEvent? = null
 
     // constructors
     constructor(context: Context) : super(context) {
@@ -88,6 +89,7 @@ class MotionView : FrameLayout {
         selectedLayerPaint = Paint()
         selectedLayerPaint!!.alpha = (255 * Constants.SELECTED_LAYER_ALPHA).toInt()
         selectedLayerPaint!!.isAntiAlias = true
+        selectedLayerPaint!!.color = Color.BLUE
         // init listeners
         scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
         rotateGestureDetector = RotateGestureDetector(context, RotateListener())
@@ -233,9 +235,15 @@ class MotionView : FrameLayout {
         return selected
     }
 
-    private fun updateSelectionOnTap(e: MotionEvent) {
+    private fun updateSelectionOnTap(e: MotionEvent): Boolean {
         val entity = findEntityAtPoint(e.x, e.y)
-        selectEntity(entity, true)
+        return if (entity != null) {
+            selectEntity(entity, true)
+            true
+        } else {
+            unselectEntity()
+            false
+        }
     }
 
     private fun updateOnLongPress(e: MotionEvent) { // if layer is currently selected and point inside layer - move it to front
@@ -334,13 +342,17 @@ class MotionView : FrameLayout {
         if (scaleGestureDetector != null) {
             scaleGestureDetector!!.onTouchEvent(event)
             rotateGestureDetector!!.onTouchEvent(event)
-            moveGestureDetector!!.onTouchEvent(event)
             gestureDetectorCompat!!.onTouchEvent(event)
+            if (updateSelectionOnTap(event)) {
+                moveGestureDetector!!.onTouchEvent(event)
+            }
         }
+
         true
     }
 
     private inner class TapsListener : SimpleOnGestureListener() {
+
         override fun onDoubleTap(e: MotionEvent): Boolean {
             if (motionViewCallback != null && selectedEntity != null) {
                 motionViewCallback!!.onEntityDoubleTap(selectedEntity)
@@ -352,10 +364,12 @@ class MotionView : FrameLayout {
             updateOnLongPress(e)
         }
 
+
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             updateSelectionOnTap(e)
             return true
         }
+
     }
 
     private inner class ScaleListener : SimpleOnScaleGestureListener() {

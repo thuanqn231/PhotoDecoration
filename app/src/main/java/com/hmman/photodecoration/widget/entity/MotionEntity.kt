@@ -86,7 +86,7 @@ abstract class MotionEntity(
     private val pC = PointF()
     private val pD = PointF()
 
-    fun pointInLayerRect(point: PointF?): Boolean {
+    fun pointInLayerRect(point: PointF): Boolean {
         updateMatrix()
         // map rect vertices
         matrix.mapPoints(destPoints, srcPoints)
@@ -98,8 +98,9 @@ abstract class MotionEntity(
         pC.y = destPoints[5]
         pD.x = destPoints[6]
         pD.y = destPoints[7]
-        return MathUtils.pointInTriangle(point!!, pA, pB, pC)
+        return MathUtils.pointInTriangle(point, pA, pB, pC)
                 || MathUtils.pointInTriangle(point, pA, pD, pC)
+
     }
 
     fun draw(@NonNull canvas: Canvas, @Nullable drawingPaint: Paint?) {
@@ -128,7 +129,7 @@ abstract class MotionEntity(
         this.borderPaint = borderPaint
     }
 
-    protected abstract fun drawContent(@NonNull canvas: Canvas?, @Nullable drawingPaint: Paint?)
+    protected abstract fun drawContent(@NonNull canvas: Canvas, @Nullable drawingPaint: Paint?)
     abstract val width: Int
     abstract val height: Int
 
