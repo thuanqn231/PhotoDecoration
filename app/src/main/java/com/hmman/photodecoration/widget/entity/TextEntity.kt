@@ -105,7 +105,7 @@ class TextEntity(
 
         if (boundsHeight < bmpHeight) {
             val textYCoordinate = (bmpHeight - boundsHeight) / 2.toFloat()
-//            canvas.translate(0f, textYCoordinate)
+            canvas.translate(0f, textYCoordinate)
         }
 
         s2.draw(canvas)

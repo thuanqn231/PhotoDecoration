@@ -7,17 +7,18 @@ import androidx.annotation.IntRange
 import androidx.annotation.NonNull
 import com.hmman.photodecoration.model.Layer
 
-class ImageEntity (@NonNull layer: Layer,
-                   @NonNull val bitmap: Bitmap,
-                   @IntRange (from = 1) canvasWidth: Int,
-                   @IntRange (from = 1) canvasHeight: Int
-): MotionEntity (layer, canvasWidth, canvasHeight) {
+class ImageEntity(
+    @NonNull layer: Layer,
+    @NonNull val bitmap: Bitmap,
+    @IntRange(from = 1) canvasWidth: Int,
+    @IntRange(from = 1) canvasHeight: Int
+) : MotionEntity(layer, canvasWidth, canvasHeight) {
 
     init {
         val width = bitmap.width
         val height = bitmap.height
-        val widthAspect = 1F * canvasWidth/width
-        val heightAspect =1F * canvasHeight/height
+        val widthAspect = 1.0F * canvasWidth / width
+        val heightAspect = 1.0F * canvasHeight / height
 
         holyScale = Math.min(widthAspect, heightAspect)
 
@@ -38,9 +39,9 @@ class ImageEntity (@NonNull layer: Layer,
     }
 
     override val width: Int
-        get() = canvasWidth
+        get() = bitmap.width
     override val height: Int
-        get() = canvasHeight
+        get() = bitmap.height
 
     override fun release() {
         if (!bitmap.isRecycled) bitmap.recycle()

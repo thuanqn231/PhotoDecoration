@@ -17,7 +17,7 @@ abstract class MotionEntity(
     protected val matrix = Matrix()
     private var isSelected = false
     protected var holyScale = 0f
-    protected val destPoints = FloatArray(10) // x0, y0, x1, y1, x2, y2, x3, y3, x0, y0
+    private val destPoints = FloatArray(10) // x0, y0, x1, y1, x2, y2, x3, y3, x0, y0
     protected val srcPoints = FloatArray(10)
 
     @NonNull
