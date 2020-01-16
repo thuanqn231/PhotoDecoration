@@ -30,7 +30,7 @@ class TextLayer : Layer() {
             const val FONT_SIZE_STEP = 0.008f
             const val INITIAL_FONT_SIZE = 0.075f
             const val INITIAL_FONT_COLOR = -0x1000000
-            const val INITIAL_SCALE = 0.8f // set the same to avoid text scaling
+            const val INITIAL_SCALE = 0.4f // set the same to avoid text scaling
         }
     }
 }

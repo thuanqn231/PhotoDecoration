@@ -14,6 +14,8 @@ import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import com.hmman.photodecoration.model.TextLayer
 import com.hmman.photodecoration.util.FontProvider
+import kotlin.math.max
+import kotlin.math.min
 
 @RequiresApi(Build.VERSION_CODES.M)
 class TextEntity(
@@ -39,12 +41,14 @@ class TextEntity(
         if (bitmap != null && bitmap != newBmp && !bitmap!!.isRecycled) {
             bitmap!!.recycle()
         }
-        this.bitmap = newBmp
+        bitmap = newBmp
         val width: Float = bitmap!!.width.toFloat()
         val height: Float = bitmap!!.height.toFloat()
-        val widthAspect = 1.0f * canvasWidth / width
+        val widthAspect = 1F * canvasWidth/width
+        val heightAspect =1F * canvasHeight/height
         // for text we always match text width with parent width
-        holyScale = widthAspect
+        holyScale = min(widthAspect, heightAspect)
+
         // initial position of the entity
         srcPoints[0] = 0f
         srcPoints[1] = 0f
@@ -55,8 +59,9 @@ class TextEntity(
         srcPoints[6] = 0f
         srcPoints[7] = height
         srcPoints[8] = 0f
-        srcPoints[9] = 0f
+        srcPoints[8] = 0f
         if (moveToPreviousCenter) { // move to previous center
+            println("da vo day")
             moveCenterTo(oldCenter)
         }
     }
@@ -67,21 +72,9 @@ class TextEntity(
         val boundsWidth = canvasWidth
 
         textPaint.style = Paint.Style.FILL
-        textPaint.textSize = 30F
+        textPaint.textSize = 45F
         textPaint.color = Color.RED
 //        textPaint.typeface = fontProvider.getTypeface(textLayer.font!!.typeface!!)
-
-        val sl = StaticLayout.Builder.obtain(
-            textLayer.text!!,
-            0,
-            textLayer.text!!.length,
-            textPaint,
-            width
-        )
-            .setAlignment(Layout.Alignment.ALIGN_CENTER)
-            .setLineSpacing(1f, 1f)
-            .setIncludePad(true)
-            .build()
 
         @Suppress("DEPRECATION")
         val s2 = StaticLayout(
@@ -94,26 +87,25 @@ class TextEntity(
             true
         )
 
-//        val sl = StaticLayout(textLayer.text, textPaint, boundsWidth, Layout.Alignment.ALIGN_CENTER,
-//            1f, 1f, true)
         val boundsHeight = s2.height
-        val bmpHeight = (canvasHeight * Math.max(
+        val bmpHeight = (canvasHeight * max(
             TextLayer.Limits.MIN_BITMAP_HEIGHT,
             1.0f * boundsHeight / canvasHeight
         )).toInt()
+
         val bmp: Bitmap
         if (reuseBmp != null && reuseBmp.width == boundsWidth && reuseBmp.height == bmpHeight) {
             bmp = reuseBmp
             bmp.eraseColor(Color.TRANSPARENT) // erase color when reusing
         } else {
-            bmp = Bitmap.createBitmap(1080, 257, Bitmap.Config.ARGB_8888)
+            bmp = Bitmap.createBitmap(boundsWidth, bmpHeight, Bitmap.Config.ARGB_8888)
         }
         val canvas = Canvas(bmp)
         canvas.save()
 
         if (boundsHeight < bmpHeight) {
             val textYCoordinate = (bmpHeight - boundsHeight) / 2.toFloat()
-            canvas.translate(0f, textYCoordinate)
+//            canvas.translate(0f, textYCoordinate)
         }
 
         s2.draw(canvas)
@@ -123,7 +115,6 @@ class TextEntity(
 
     override fun drawContent(canvas: Canvas, drawingPaint: Paint?) {
         if (bitmap != null) {
-            println("da vo day")
             canvas!!.drawBitmap(bitmap!!, matrix, drawingPaint)
         }
     }

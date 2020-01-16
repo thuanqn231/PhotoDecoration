@@ -154,6 +154,7 @@ class MotionView : FrameLayout {
      */
     private fun drawAllEntities(canvas: Canvas) {
         for (i in entities.indices) {
+            println(i)
             entities[i].draw(canvas, null)
         }
     }// IMPORTANT: always create white background, cos if the image is saved in JPEG format,
