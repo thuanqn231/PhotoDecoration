@@ -37,7 +37,7 @@ class MotionView : FrameLayout {
     // layers
     private val entities: MutableList<MotionEntity> =
         ArrayList()
-    private val undoEntities: Stack<MotionEntity> = Stack<MotionEntity>()
+    private val undoEntities: Stack<MotionEntity> = Stack()
     private val resetEntities: MutableList<MotionEntity> = ArrayList<MotionEntity>()
 
     @Nullable
@@ -305,8 +305,7 @@ class MotionView : FrameLayout {
 
     fun redo() {
         if (undoEntities.size > 0) {
-            entities.add(undoEntities.lastElement())
-            undoEntities.pop()
+            entities.add(undoEntities.pop())
             updateUI()
         } else {
             Toast.makeText(this.context, "Nothing to Redo", Toast.LENGTH_SHORT).show();
@@ -316,21 +315,25 @@ class MotionView : FrameLayout {
     fun undo() {
         val lastItemPosition = entities.size - 1
         val listSize = entities.size
-        if (isReseted) {
-            entities.addAll(resetEntities)
-            resetEntities.clear()
-            updateUI()
-            isReseted = false
-        } else if (listSize > 0) {
-            undoEntities.push(entities.get(lastItemPosition))
-            entities.removeAt(lastItemPosition)
-            updateUI()
-        } else {
-            Toast.makeText(this.context, "Nothing to Undo", Toast.LENGTH_SHORT).show();
+        when {
+            isReseted -> {
+                entities.addAll(resetEntities)
+                resetEntities.clear()
+                updateUI()
+                isReseted = false
+            }
+            listSize > 0 -> {
+                undoEntities.push(entities.removeAt(lastItemPosition))
+                selectEntity(null, false)
+                updateUI()
+            }
+            else -> {
+                Toast.makeText(this.context, "Nothing to Undo", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    var isReseted = false
+    private var isReseted = false
     fun reset() {
         resetEntities.addAll(entities)
         entities.clear()
@@ -344,9 +347,9 @@ class MotionView : FrameLayout {
             scaleGestureDetector!!.onTouchEvent(event)
             rotateGestureDetector!!.onTouchEvent(event)
             gestureDetectorCompat!!.onTouchEvent(event)
-            if (updateSelectionOnTap(event)) {
-                moveGestureDetector!!.onTouchEvent(event)
-            }
+//            if (updateSelectionOnTap(event)) {
+            moveGestureDetector!!.onTouchEvent(event)
+//            }
         }
 
         true
