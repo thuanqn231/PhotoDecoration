@@ -1,6 +1,6 @@
 package com.hmman.photodecoration.model
 
-class Font {
+class Font { 
     var color = 0
     var typeface: String? = null
     var size = 0f
