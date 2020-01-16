@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             val canvas = Canvas(bitmap)
             motionView.draw(canvas)
 
-            imgResult.setBackgroundColor(Color.RED)
+            imgResult.setBackgroundColor(Color.BLUE)
             imgResult.setImageBitmap(bitmap)
             imgResult.visibility = View.VISIBLE
         }

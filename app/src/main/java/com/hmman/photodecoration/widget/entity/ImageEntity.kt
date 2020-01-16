@@ -15,22 +15,22 @@ class ImageEntity(
 ) : MotionEntity(layer, canvasWidth, canvasHeight) {
 
     init {
-        val width = bitmap.width
-        val height = bitmap.height
-        val widthAspect = 1.0F * canvasWidth / width
-        val heightAspect = 1.0F * canvasHeight / height
+        val width = bitmap.width.toFloat()
+        val height = bitmap.height.toFloat()
+        val widthAspect = 1F * canvasWidth/width
+        val heightAspect =1F * canvasHeight/height
+
 
         holyScale = Math.min(widthAspect, heightAspect)
 
         srcPoints[0] = 0f
         srcPoints[1] = 0f
-        srcPoints[2] = width.toFloat()
+        srcPoints[2] = width
         srcPoints[3] = 0f
-        srcPoints[4] = width.toFloat()
-        srcPoints[5] = height.toFloat()
+        srcPoints[4] = width
+        srcPoints[5] = height
         srcPoints[6] = 0f
-        srcPoints[7] = height.toFloat()
-        srcPoints[8] = 0f
+        srcPoints[7] = height
         srcPoints[8] = 0f
     }
 
