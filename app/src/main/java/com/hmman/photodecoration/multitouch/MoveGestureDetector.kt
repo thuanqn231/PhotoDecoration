@@ -2,6 +2,7 @@ package com.hmman.photodecoration.multitouch
 
 import android.content.Context
 import android.graphics.PointF
+import android.util.Log
 import android.view.MotionEvent
 
 class MoveGestureDetector (
@@ -29,7 +30,7 @@ class MoveGestureDetector (
 
                 updateStateByEvent(event!!)
             }
-            MotionEvent.ACTION_MOVE -> mGestureInProgress = mListener!!.onMoveBegin(this)
+            MotionEvent.ACTION_MOVE -> mGestureInProgress = mListener.onMoveBegin(this)
         }
     }
 
@@ -37,13 +38,13 @@ class MoveGestureDetector (
         when (actionCode){
             MotionEvent.ACTION_UP -> {}
             MotionEvent.ACTION_CANCEL -> {
-                mListener!!.onMoveEnd(this)
+                mListener.onMoveEnd(this)
                 resetState()
             }
             MotionEvent.ACTION_MOVE -> {
                 updateStateByEvent(event!!)
                 if (mCurrPressure / mPrevPressure > PRESSURE_THRESHOLD){
-                    val updatePrevious = mListener!!.onMove(this)
+                    val updatePrevious = mListener.onMove(this)
                     if (updatePrevious){
                         mPrevEvent!!.recycle()
                         mPrevEvent = MotionEvent.obtain(event)
@@ -105,6 +106,7 @@ class MoveGestureDetector (
 
     companion object {
         val FOCUS_DELTA_ZERO = PointF()
+        val TAG = this::class.java.simpleName
     }
 
     open class SimpleOnMoveGestureListener : OnMoveGestureListener {
