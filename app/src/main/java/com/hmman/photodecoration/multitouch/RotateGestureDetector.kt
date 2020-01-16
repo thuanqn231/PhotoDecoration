@@ -1,6 +1,7 @@
 package com.hmman.photodecoration.multitouch
 
 import android.content.Context
+import android.util.Log
 import android.view.MotionEvent
 
 class RotateGestureDetector(
@@ -13,7 +14,6 @@ class RotateGestureDetector(
     override fun handleStartProgressEvent(actionCode: Int, event: MotionEvent?) {
         when (actionCode) {
             MotionEvent.ACTION_POINTER_DOWN -> {
-
                 resetState()
                 mPrevEvent = MotionEvent.obtain(event)
                 mTimeDelta = 0

@@ -59,9 +59,8 @@ class TextEntity(
         srcPoints[6] = 0f
         srcPoints[7] = height
         srcPoints[8] = 0f
-        srcPoints[8] = 0f
+
         if (moveToPreviousCenter) { // move to previous center
-            println("da vo day")
             moveCenterTo(oldCenter)
         }
     }
