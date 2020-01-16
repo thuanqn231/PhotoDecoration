@@ -4,22 +4,23 @@ import android.content.Context
 import android.view.MotionEvent
 
 class RotateGestureDetector(
-    context: Context?,
+    context: Context,
     private val mListener: OnRotateGestureListener
-) :
-    TwoFingerGestureDetector(context!!) {
+) : TwoFingerGestureDetector(context) {
+
     private var mSloppyGesture = false
+
     override fun handleStartProgressEvent(actionCode: Int, event: MotionEvent?) {
         when (actionCode) {
             MotionEvent.ACTION_POINTER_DOWN -> {
-                // At least the second finger is on screen now
-                resetState() // In case we missed an UP/CANCEL event
+
+                resetState()
                 mPrevEvent = MotionEvent.obtain(event)
                 mTimeDelta = 0
                 updateStateByEvent(event!!)
 
                 mSloppyGesture = isSloppyGesture(event)
-                if (!mSloppyGesture) { // No, start gesture now
+                if (!mSloppyGesture) {
                     mGestureInProgress = mListener.onRotateBegin(this)
                 }
             }

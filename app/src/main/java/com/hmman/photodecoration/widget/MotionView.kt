@@ -344,10 +344,13 @@ class MotionView : FrameLayout {
             scaleGestureDetector!!.onTouchEvent(event)
             rotateGestureDetector!!.onTouchEvent(event)
             gestureDetectorCompat!!.onTouchEvent(event)
-            if (updateSelectionOnTap(event)) {
-                moveGestureDetector!!.onTouchEvent(event)
-            }
+            moveGestureDetector!!.onTouchEvent(event)
+
+//            if (updateSelectionOnTap(event)) {
+//                moveGestureDetector!!.onTouchEvent(event)
+//            }
         }
+//        moveGestureDetector!!.onTouchEvent(event)
 
         true
     }

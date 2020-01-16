@@ -24,10 +24,7 @@ abstract class BaseGestureDetector(protected val mContext: Context) {
         return true
     }
 
-    protected abstract fun handleStartProgressEvent(
-        actionCode: Int,
-        event: MotionEvent?
-    )
+    protected abstract fun handleStartProgressEvent(actionCode: Int, event: MotionEvent?)
 
     protected abstract fun handleInProgressEvent(actionCode: Int, event: MotionEvent?)
 

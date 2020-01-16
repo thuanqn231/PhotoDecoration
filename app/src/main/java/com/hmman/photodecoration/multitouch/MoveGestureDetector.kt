@@ -2,6 +2,7 @@ package com.hmman.photodecoration.multitouch
 
 import android.content.Context
 import android.graphics.PointF
+import android.util.Log
 import android.view.MotionEvent
 
 class MoveGestureDetector(context: Context, listener: OnMoveGestureListener) :
@@ -28,23 +29,24 @@ class MoveGestureDetector(context: Context, listener: OnMoveGestureListener) :
                 updateStateByEvent(event!!)
             }
             MotionEvent.ACTION_MOVE ->
-                mGestureInProgress = mListener!!.onMoveBegin(this)
-
+                mGestureInProgress = mListener.onMoveBegin(this)
         }
     }
 
     override fun handleInProgressEvent(actionCode: Int, event: MotionEvent?) {
         when (actionCode) {
             MotionEvent.ACTION_UP -> {
+                mListener.onMoveEnd(this)
+                resetState()
             }
             MotionEvent.ACTION_CANCEL -> {
-                mListener!!.onMoveEnd(this)
+                mListener.onMoveEnd(this)
                 resetState()
             }
             MotionEvent.ACTION_MOVE -> {
                 updateStateByEvent(event!!)
                 if (mCurrPressure / mPrevPressure > PRESSURE_THRESHOLD) {
-                    val updatePrevious = mListener!!.onMove(this)
+                    val updatePrevious = mListener.onMove(this)
                     if (updatePrevious) {
                         mPrevEvent!!.recycle()
                         mPrevEvent = MotionEvent.obtain(event)
@@ -102,7 +104,8 @@ class MoveGestureDetector(context: Context, listener: OnMoveGestureListener) :
                 mCurrFocusInternal!!.y - mPrevFocusInternal!!.y
             )
 
-
+//        mFocusExternal.x += mFocusDeltaExternal.x
+//        mFocusExternal.y += mFocusDeltaExternal.y
     }
 
     companion object {
